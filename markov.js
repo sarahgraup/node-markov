@@ -27,7 +27,29 @@ class MarkovMachine {
    * */
 
   getChains() {
-    // TODO: implement this!
+    const chains = new Map();
+
+    for (let i = 0; i < this.words.length; i++) {
+      const word = this.words[i];
+      let nextWord = this.words[i + 1];
+
+      if (nextWord === undefined) {
+        nextWord = null;
+
+      }
+
+      if (chains.has(word)) {
+        chains.get(word).push(nextWord);
+      }
+      else {
+
+        chains.set(word, [nextWord]);
+
+      }
+
+    }
+    return chains;
+
   }
 
 
@@ -35,10 +57,33 @@ class MarkovMachine {
    *  until it hits a null choice. */
 
   getText() {
-    // TODO: implement this!
 
-    // - start at the first word in the input text
-    // - find a random word from the following-words of that
-    // - repeat until reaching the terminal null
+    let firstWord = this.words[0];
+    const text = [firstWord];
+
+    while(true){
+      const word = this.getRandomItem(this.chains.get(firstWord));
+      if(word===null){
+        break;
+      }
+      text.push(word); //could make an array and push onto it and then join into string
+      firstWord = word;
+
+    }
+
+    return text.join(" ");
+
+  }
+
+  /**return random item from items array */
+  getRandomItem(items){
+    const randomIndex = Math.floor(Math.random() * items.length);
+
+    const item = items[randomIndex];
+
+    return item;
   }
 }
+
+const catInHatMachine = new MarkovMachine("the brown dog jumped over the lazy fox in a pool.");
+console.log(catInHatMachine.getText());
