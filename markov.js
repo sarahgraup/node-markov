@@ -1,8 +1,6 @@
 /** Textual markov chain generator. */
 
-
 class MarkovMachine {
-
   /** Build markov machine; read in text.*/
 
   constructor(text) {
@@ -15,7 +13,7 @@ class MarkovMachine {
   /** Get markov chain: returns Map of Markov chains.
    *
    *  For text of "The cat in the hat.", chains will be:
-   * 
+   *
    *  {
    *   "The": ["cat"],
    *   "cat": ["in"],
@@ -23,7 +21,7 @@ class MarkovMachine {
    *   "the": ["hat."],
    *   "hat.": [null],
    *  }
-   * 
+   *
    * */
 
   getChains() {
@@ -35,48 +33,38 @@ class MarkovMachine {
 
       if (nextWord === undefined) {
         nextWord = null;
-
       }
-
       if (chains.has(word)) {
         chains.get(word).push(nextWord);
-      }
-      else {
-
+      } else {
         chains.set(word, [nextWord]);
-
       }
-
     }
+    console.log(chains.size);
     return chains;
-
   }
-
 
   /** Return random text from chains, starting at the first word and continuing
    *  until it hits a null choice. */
 
   getText() {
-
     let firstWord = this.words[0];
     const text = [firstWord];
 
-    while(true){
+    while (true) {
       const word = this.getRandomItem(this.chains.get(firstWord));
-      if(word===null){
+      if (word === null) {
         break;
       }
       text.push(word); //could make an array and push onto it and then join into string
       firstWord = word;
-
     }
 
     return text.join(" ");
-
   }
 
   /**return random item from items array */
-  getRandomItem(items){
+  getRandomItem(items) {
     const randomIndex = Math.floor(Math.random() * items.length);
 
     const item = items[randomIndex];
@@ -85,5 +73,7 @@ class MarkovMachine {
   }
 }
 
-const catInHatMachine = new MarkovMachine("the brown dog jumped over the lazy fox in a pool.");
+const catInHatMachine = new MarkovMachine("The cat and a hat and cat");
 console.log(catInHatMachine.getText());
+
+module.exports = { MarkovMachine };
